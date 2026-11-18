@@ -1,6 +1,5 @@
 __pycache__/
 *.pyc
 .venv/
-evidencias/*.png
 .env
 explorar.py
