@@ -11,7 +11,7 @@ class LoginPage(BasePage):
 
     def abrir(self):
         # navega até a página inicial, onde fica o login
-        self.page.goto(BASE_URL)
+        self.page.goto(f"{BASE_URL}/index.htm")
 
     def logar(self, usuario, senha):
         self.preencher(self.CAMPO_USUARIO, usuario)
