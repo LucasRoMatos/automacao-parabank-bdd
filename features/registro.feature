@@ -15,7 +15,14 @@ Feature: Registro do ParaBank
     Then vejo a mensagem de campo obrigatório "<mensagem>"
 
     Examples:
-      | campo         | mensagem                |
-      | primeiro_nome | First name is required. |
-      | ultimo_nome   | Last name is required.  |
-      | usuario       | Username is required.   |
+      | campo         | mensagem                            |
+      | primeiro_nome | First name is required.             |
+      | ultimo_nome   | Last name is required.              |
+      | endereco      | Address is required.                |
+      | cidade        | City is required.                   |
+      | estado        | State is required.                  |
+      | cep           | Zip Code is required.               |
+      | ssn           | Social Security Number is required. |
+      | usuario       | Username is required.               |
+      | senha         | Password is required.               |
+      | confirma_senha | Password confirmation is required. |
