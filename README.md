@@ -1,17 +1,26 @@
-# Automação BDD: ParaBank
+# Automação de testes BDD: ParaBank
 
-Automação de testes BDD para as funcionalidades de **Registro**, **Login** e **Transferência de Fundos** da aplicação de demonstração ParaBank, usando Python, Behave e Playwright.
+Testes automatizados das funcionalidades de **registro**, **login** e **transferência de fundos** da aplicação de demonstração ParaBank. Os cenários são escritos em Gherkin com Behave, e a automação do navegador usa Playwright, com o padrão Page Object.
+
+## Evidências do funcionamento
+
+### Executando todos os testes localmente
+![Gif da execução](evidencias/resumo-execucao-gif.gif)
+
+### Resumo da execução
+![Resumo da execução](evidencias/resumo-execucao.png)
 
 ## Tecnologias
 
 - Python 3.12+
 - Behave (BDD, cenários em Gherkin)
-- Playwright (automação de navegador)
+- Playwright (automação do navegador)
 
 ## Pré-requisitos
 
 - Python 3.12 ou superior
 - Git
+- Docker Desktop, para o ambiente local (recomendado)
 
 ## Instalação
 
@@ -24,6 +33,29 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
+## Ambiente de execução
+
+Os testes usam a URL definida na variável `PARABANK_URL`. Se a variável não estiver definida, usam o site público.
+
+### Ambiente local (recomendado)
+
+Sobe uma cópia do ParaBank no seu computador, sem depender do site externo:
+
+```powershell
+docker run -d -p 8080:8080 parasoft/parabank
+$env:PARABANK_URL="http://localhost:8080/parabank"
+```
+
+Aguarde um ou dois minutos após o `docker run` antes de rodar os testes. Para confirmar que a aplicação subiu, abra `http://localhost:8080/parabank` no navegador.
+
+Em bash, use `export PARABANK_URL="http://localhost:8080/parabank"`.
+
+### Site público (padrão)
+
+Usado quando `PARABANK_URL` não está definida: `https://parabank.parasoft.com/parabank`.
+
+Esse site é instável. Pode responder com erro interno a operações válidas, e pode exibir o desafio "Confirme que é humano" da Cloudflare, que impede a automação. Nesses casos a falha não vem do código. Por isso o ambiente local é a forma recomendada de execução.
+
 ## Execução
 
 Rodar todos os cenários:
@@ -32,62 +64,60 @@ Rodar todos os cenários:
 python -m behave
 ```
 
-Rodar uma funcionalidade específica:
+Rodar uma funcionalidade:
 
 ```powershell
 python -m behave features/registro.feature
 python -m behave features/login.feature
+python -m behave features/transferencia.feature
 ```
 
-Rodar apenas os cenários marcados como `@smoke`:
+Rodar sem os cenários de caracterização (ver a seção abaixo):
 
 ```powershell
-python -m behave --tags=@smoke
+python -m behave --tags=~@caracterizacao
+```
+Resumo de uma execução completa no ambiente local:
+
+## Cenários de caracterização
+
+Cenários marcados com `@caracterizacao` documentam **o comportamento atual da aplicação**, e não um requisito validado. Não existe especificação formal para essas situações. Por isso, o critério de aceite adotado é o que o sistema faz hoje, observado na exploração manual.
+
+Eles servem para:
+
+- registrar comportamentos que deveriam ser reportados como problema, sem tratá-los como corretos;
+- detectar mudanças: se o comportamento mudar, o cenário falha e avisa;
+- deixar documentado o que foi observado e como foi testado.
+
+Comportamentos documentados:
+
+- **Acesso à página de contas sem sessão:** a aplicação mostra "An internal error has occurred and has been logged." em vez de redirecionar para o login.
+- **Transferência com valor zero ou negativo:** a aplicação aceita e mostra "Transfer Complete!".
+- **Transferência com valor não numérico ou campo vazio:** a aplicação mostra "An internal error has occurred and has been logged.", sem mensagem de validação.
+
+Se uma regra de negócio for definida para essas situações, o cenário deve ser reescrito para verificar a regra e a tag `@caracterizacao` deve ser removida.
+
+## Estrutura do projeto
+
+```
+features/          cenários em Gherkin e configuração de hooks (environment.py)
+features/steps/    passos que traduzem o Gherkin em ações nas páginas
+pages/             Page Objects: seletores e ações de cada tela
+support/           geração de dados de teste
+config.py          URL base da aplicação
+evidencias/        saídas de execução e screenshots de falhas
 ```
 
-Salvar a saída da execução como evidência:
+## Evidências
+
+Para salvar uma nova saída de uma execução:
 
 ```powershell
 python -m behave > evidencias/execucao.txt
 ```
 
-## Ambiente alternativo (opcional)
+## Limitações
 
-Por padrão, os testes usam o ParaBank público (`https://parabank.parasoft.com/parabank`). Esse site pode exibir um desafio de segurança da Cloudflare de forma intermitente. Para evitar essa interferência, é possível rodar a aplicação localmente com Docker e apontar os testes para ela:
-
-```powershell
-docker run -d -p 8080:8080 parasoft/parabank
-$env:PARABANK_URL="http://localhost:8080/parabank"
-python -m behave
-```
-
-## Estrutura do projeto
-
-```
-features/      cenários em Gherkin e steps
-pages/         Page Objects com seletores e ações
-support/       geração de dados de teste
-config.py      configuração de ambiente
-evidencias/    saídas de execução e screenshots
-```
-
-## Cobertura
-
-| Funcionalidade | Cenários |
-|---|---|
-| Registro | Sucesso, campos obrigatórios, cadastro sem telefone |
-| Login | Credenciais válidas, credenciais incorretas, campos vazios |
-| Transferência | Saldo suficiente, saldo insuficiente, valor inválido |
-
-## Decisões de projeto
-
-- **Seletores por atributo `name` e `value`**, mais estáveis que classes CSS.
-- **Page Object Model**: seletores e ações ficam nas páginas, e os steps só traduzem o Gherkin.
-- **Dados únicos a cada execução** no registro, evitando conflito de usuário.
-- **Contexto de navegador por cenário**, isolando sessão e cookies entre os testes.
-- **URL base em configuração**, para trocar de ambiente sem alterar o código.
-- **Cadastro sem telefone**: a tela não exige o campo, então ele é tratado como opcional.
-
-## Limitações conhecidas
-
-- O site público pode exibir o desafio "Confirme que é humano" da Cloudflare. Nesse caso, a suíte informa a causa da falha, e a alternativa é o ambiente local com Docker.
+- O site público pode exibir o desafio da Cloudflare e responder com erro interno de forma intermitente.
+- O site público é uma demonstração, e seus dados podem ser reiniciados sem aviso.
+- Cada execução cria um usuário novo, com nome único, então os testes não dependem de dados existentes.
