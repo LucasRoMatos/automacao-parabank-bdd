@@ -1,10 +1,10 @@
-import time
+import uuid
 
 
 def novo_usuario():
-    sufixo = int(time.time())
+    sufixo = uuid.uuid4().hex[:8]
     return {
-        "primeiro_nome": "Lucas",
+        "primeiro_nome": "Maria",
         "ultimo_nome": "Teste",
         "endereco": "Rua das Flores, 100",
         "cidade": "Mogi das Cruzes",
