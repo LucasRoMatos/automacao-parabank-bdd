@@ -17,4 +17,7 @@ def passo_usuario_cadastrado(context):
     registro.abrir()
     registro.preencher_formulario(context.dados)
     registro.enviar()
-    assert "created successfully" in registro.mensagem_de_sucesso()
+    texto = registro.mensagem_de_sucesso()
+    assert "created successfully" in texto, (
+        f"Cadastro não confirmado. A tela mostrou: '{texto}'"
+    )
