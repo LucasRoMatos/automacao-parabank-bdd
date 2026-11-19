@@ -20,3 +20,7 @@ class LoginPage(BasePage):
 
     def mensagem_de_erro(self):
         return self.texto_de(self.MENSAGEM_ERRO_CREDENCIAIS)
+
+    def formulario_visivel(self):
+        self.page.wait_for_selector(self.CAMPO_USUARIO, state="visible", timeout=10000)
+        return True

@@ -2,14 +2,9 @@ from pages.base_page import BasePage
 
 
 class TransferenciaPage(BasePage):
-    # menu lateral (confirme com F12 se necessário)
     LINK_TRANSFERIR = "a[href='transfer.htm']"
-
-    # formulário (confirmado na exploração)
     CAMPO_VALOR = "#amount"
     BOTAO_TRANSFERIR = "input[value='Transfer']"
-
-    # resultado (confirme com F12 na tela de sucesso)
     TITULO_RESULTADO = "h1.title"
 
     def acessar(self):

@@ -1,6 +1,35 @@
 Feature: Login do ParaBank
 
-  Scenario: Login com credenciais incorretas
+  Background:
     Given que abro a página inicial
+
+  Scenario: Login com credenciais incorretas
     When informo o usuário "UserTesteErro" e a senha "SenhaTesteErro"
     Then vejo a mensagem de erro "The username and password could not be verified."
+
+  Scenario: Login com senha incorreta para usuário cadastrado
+    Given que existe um usuário cadastrado
+    And que faço logout
+    When informo o usuário cadastrado e a senha "SenhaErrada123"
+    Then vejo a mensagem de erro "The username and password could not be verified."
+
+  Scenario Outline: Login com campo vazio
+    When informo o usuário "<usuario>" e a senha "<senha>"
+    Then vejo a mensagem de erro "<mensagem>"
+
+    Examples:
+      | usuario | senha    | mensagem                                |
+      | vazio   | senha123 | Please enter a username and password.   |
+      | usuario | vazio    | Please enter a username and password.   |
+      | vazio   | vazio    | Please enter a username and password.   |
+
+  Scenario: Login com credenciais corretas
+    Given que existe um usuário cadastrado
+    And que faço logout
+    When informo o usuário cadastrado e sua senha
+    Then vejo a página de contas
+
+  Scenario: Logout
+    Given que existe um usuário cadastrado
+    When que faço logout
+    Then vejo a página inicial
