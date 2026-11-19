@@ -1,6 +1,7 @@
 from behave import given, when, then, step
 from pages.login_page import LoginPage
 from pages.conta_page import ContaPage
+from config import BASE_URL
 
 @when('informo o usuário "{usuario}" e a senha "{senha}"')
 def passo_logar(context, usuario, senha):
@@ -39,3 +40,7 @@ def passo_pagina_inicial(context):
 @when('informo o usuário cadastrado e a senha "{senha}"')
 def passo_logar_usuario_cadastrado_senha_errada(context, senha):
     context.login.logar(context.dados["usuario"], senha)
+
+@when('acesso a página de contas diretamente')
+def passo_acessar_contas_direto(context):
+    context.page.goto(f"{BASE_URL}/overview.htm")

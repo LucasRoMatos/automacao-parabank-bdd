@@ -33,3 +33,10 @@ Feature: Login do ParaBank
     Given que existe um usuário cadastrado
     When que faço logout
     Then vejo a página inicial
+
+  @caracterizacao
+  Scenario: Acesso à página de contas sem login retorna erro interno
+    Given que existe um usuário cadastrado
+    And que faço logout
+    When acesso a página de contas diretamente
+    Then vejo a mensagem de erro "An internal error has occurred and has been logged."
