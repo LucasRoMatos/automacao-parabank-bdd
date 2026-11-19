@@ -15,13 +15,13 @@ Feature: Login do ParaBank
 
   Scenario Outline: Login com campo vazio
     When informo o usuário "<usuario>" e a senha "<senha>"
-    Then vejo a mensagem de erro "<mensagem>"
+    Then vejo a mensagem de erro "Please enter a username and password."
 
     Examples:
-      | usuario | senha    | mensagem                                |
-      | vazio   | senha123 | Please enter a username and password.   |
-      | usuario | vazio    | Please enter a username and password.   |
-      | vazio   | vazio    | Please enter a username and password.   |
+      | usuario | senha    |
+      | vazio   | senha123 |
+      | usuario | vazio    |
+      | vazio   | vazio    |
 
   Scenario: Login com credenciais corretas
     Given que existe um usuário cadastrado
