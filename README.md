@@ -9,6 +9,17 @@ Testes automatizados das funcionalidades de **registro**, **login** e **transfer
 ### Executando todos os testes localmente
 ![Gif da execução](evidencias/resumo-execucao-gif.gif)
 
+### Integração contínua
+
+Como um plus, implementei esse integração que a cada push ou pull request, o GitHub Actions executa a suíte completa automaticamente. O workflow (`.github/workflows/testes.yml`):
+
+- sobe o ParaBank em contêiner como serviço do job;
+- aguarda a aplicação responder antes de iniciar os testes;
+- executa o Behave em modo headless, sem interface gráfica;
+- publica a saída da execução como artefato, disponível na aba Actions.
+
+A execução também pode ser disparada manualmente pela aba Actions, na opção "Run workflow".
+
 ### Resumo da execução
 ![Resumo da execução](evidencias/resumo-execucao.png)
 
@@ -89,17 +100,6 @@ Rodar sem os cenários de caracterização (ver a seção abaixo):
 python -m behave --tags=~@caracterizacao
 ```
 
-## Integração contínua
-
-Como um plus, implementei esse integração que a cada push ou pull request, o GitHub Actions executa a suíte completa automaticamente. O workflow (`.github/workflows/testes.yml`):
-
-- sobe o ParaBank em contêiner como serviço do job;
-- aguarda a aplicação responder antes de iniciar os testes;
-- executa o Behave em modo headless, sem interface gráfica;
-- publica a saída da execução como artefato, disponível na aba Actions.
-
-A execução também pode ser disparada manualmente pela aba Actions, na opção "Run workflow".
-
 ## Cenários de caracterização
 
 Cenários marcados com `@caracterizacao` documentam **o comportamento atual da aplicação**, e não um requisito validado. Não existe especificação formal para essas situações. Por isso, o critério de aceite adotado é o que o sistema faz hoje, observado na exploração manual.
@@ -129,16 +129,7 @@ config.py          URL base da aplicação
 evidencias/        saídas de execução e screenshots de falhas
 ```
 
-## Evidências
-
-Para salvar uma nova saída de uma execução:
-
-```powershell
-python -m behave > evidencias/execucao.txt
-```
-
 ## Limitações
 
 - O site público pode exibir o desafio da Cloudflare e responder com erro interno de forma intermitente.
 - O site público é uma demonstração, e seus dados podem ser reiniciados sem aviso.
-- Cada execução cria um usuário novo, com nome único, então os testes não dependem de dados existentes.
