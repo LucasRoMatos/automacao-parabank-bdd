@@ -1,6 +1,7 @@
-from behave import given
+from behave import given, step
 from pages.login_page import LoginPage
 from pages.registro_page import RegistroPage
+from pages.conta_page import ContaPage
 from support.dados import novo_usuario
 
 
@@ -21,3 +22,7 @@ def passo_usuario_cadastrado(context):
     assert "created successfully" in texto, (
         f"Cadastro não confirmado. A tela mostrou: '{texto}'"
     )
+
+@step('que faço logout')
+def passo_logout(context):
+    ContaPage(context.page).sair()

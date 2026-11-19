@@ -1,4 +1,4 @@
-from behave import given, when, then, step
+from behave import given, when, then
 from pages.login_page import LoginPage
 from pages.conta_page import ContaPage
 from config import BASE_URL
@@ -15,10 +15,6 @@ def passo_mensagem_erro(context, mensagem):
     assert mensagem_atual == mensagem, (
         f"Esperado '{mensagem}', mas apareceu '{mensagem_atual}'"
     )
-
-@step('que faço logout')
-def passo_logout(context):
-    ContaPage(context.page).sair()
 
 @when('informo o usuário cadastrado e sua senha')
 def passo_logar_cadastrado(context):
