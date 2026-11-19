@@ -19,3 +19,12 @@ def passo_transferencia_concluida(context):
     assert "Transfer Complete" in texto or "internal error" not in texto.lower(), (
         f"A aplicação retornou erro interno em vez de concluir a transferência: '{texto}'"
     )
+
+@then('vejo a mensagem de erro interno')
+def passo_erro_interno(context):
+    texto = context.transferencia.texto_resultado()
+    assert "internal error" in texto, f"Esperado erro interno, mas a tela mostrou: '{texto}'"
+
+@when('transfiro sem valor')
+def passo_transferir_sem_valor(context):
+    context.transferencia.transferir("")
