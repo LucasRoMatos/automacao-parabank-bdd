@@ -39,7 +39,9 @@ Os testes usam a URL definida na variável `PARABANK_URL`. Se a variável não e
 
 ### Ambiente local (recomendado)
 
-Sobe uma cópia do ParaBank no seu computador, sem depender do site externo:
+Antes de tudo, abra o Docker Desktop e aguarde iniciar.
+
+No PowerShell, rode:
 
 ```powershell
 docker run -d -p 8080:8080 parasoft/parabank
@@ -48,7 +50,14 @@ $env:PARABANK_URL="http://localhost:8080/parabank"
 
 Aguarde um ou dois minutos após o `docker run` antes de rodar os testes. Para confirmar que a aplicação subiu, abra `http://localhost:8080/parabank` no navegador.
 
-Em bash, use `export PARABANK_URL="http://localhost:8080/parabank"`.
+A variável `PARABANK_URL` vale somente para o terminal em que foi definida. Se abrir outro terminal, defina de novo.
+
+Em bash, zsh ou Git Bash, use:
+
+```bash
+docker run -d -p 8080:8080 parasoft/parabank
+export PARABANK_URL="http://localhost:8080/parabank"
+```
 
 ### Site público (padrão)
 
