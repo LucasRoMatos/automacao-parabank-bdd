@@ -1,5 +1,7 @@
 # Automação de testes BDD: ParaBank
 
+[![Testes BDD](https://github.com/LucasRoMatos/automacao-parabank-bdd/actions/workflows/testes.yml/badge.svg)](https://github.com/LucasRoMatos/automacao-parabank-bdd/actions/workflows/testes.yml)
+
 Testes automatizados das funcionalidades de **registro**, **login** e **transferência de fundos** da aplicação de demonstração ParaBank. Os cenários são escritos em Gherkin com Behave, e a automação do navegador usa Playwright, com o padrão Page Object.
 
 ## Evidências do funcionamento
@@ -86,7 +88,17 @@ Rodar sem os cenários de caracterização (ver a seção abaixo):
 ```powershell
 python -m behave --tags=~@caracterizacao
 ```
-Resumo de uma execução completa no ambiente local:
+
+## Integração contínua
+
+Como um plus, implementei esse integração que a cada push ou pull request, o GitHub Actions executa a suíte completa automaticamente. O workflow (`.github/workflows/testes.yml`):
+
+- sobe o ParaBank em contêiner como serviço do job;
+- aguarda a aplicação responder antes de iniciar os testes;
+- executa o Behave em modo headless, sem interface gráfica;
+- publica a saída da execução como artefato, disponível na aba Actions.
+
+A execução também pode ser disparada manualmente pela aba Actions, na opção "Run workflow".
 
 ## Cenários de caracterização
 
