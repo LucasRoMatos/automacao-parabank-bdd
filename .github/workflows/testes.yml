@@ -17,6 +17,7 @@ jobs:
 
     env:
       PARABANK_URL: http://localhost:8080/parabank
+      HEADLESS: "true"
 
     steps:
       - uses: actions/checkout@v4
